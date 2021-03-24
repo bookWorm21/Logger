@@ -1,42 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Logger
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, it is my logger realization");
-            string path = "H:/Bars/Logger/DebugInformation" + "/" + DateTime.Now.ToShortDateString();
-            ILog logger = new Logger(path);
-
-            Random rand = new Random();
-            List<Exception> exceptions = new List<Exception>();
-            exceptions.Add(new IndexOutOfRangeException());
-            exceptions.Add(new StackOverflowException());
-            exceptions.Add(new FieldAccessException());
-            exceptions.Add(new FileLoadException());
-            exceptions.Add(new FileNotFoundException());
-            exceptions.Add(new Exception());
-
-            for(int i = 0; i < 100; i++)
-            {
-                if (rand.Next(0, 2) == 0)
-                {
-                    logger.Error(exceptions[rand.Next(0, exceptions.Count)]);
-                }
-                else
-                {
-                    logger.Error("no, it is error", exceptions[rand.Next(0, exceptions.Count)]);
-                }
-            }
-
-            Console.ReadKey();
-        }
-    }
-
     class Logger : ILog
     {
         private readonly string _logFilesPath;
@@ -69,7 +36,7 @@ namespace Logger
         {
             string objInfo = "";
 
-            for(int i = 0; i < args.Length; i++)
+            for (int i = 0; i < args.Length; i++)
             {
                 objInfo += args[i].ToString() + " ";
             }
@@ -98,7 +65,7 @@ namespace Logger
 
         public void ErrorUnique(string message, Exception e)
         {
-            if(_exceptions.Contains(e.GetType().Name) == false)
+            if (_exceptions.Contains(e.GetType().Name) == false)
             {
                 string exceptionType = e.GetType().Name;
                 _exceptions.Add(exceptionType);
@@ -141,7 +108,7 @@ namespace Logger
         public void SystemInfo(string message, Dictionary<object, object> properties = null)
         {
             string objInfo = "";
-            foreach(var item in properties)
+            foreach (var item in properties)
             {
                 objInfo += item.GetType().Name;
             }
